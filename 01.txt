@@ -1,0 +1,53 @@
+In Chef you have cookbooks that contains recipies. Pull type where each node has an agent that regularly pull config from chef to ensure servers are running as configured in the cookbook.
+Ansible is a push configuration tool. It will have different modules. Each module is collection of playbooks as yaml files that configures the servers.
+Also there is an inventory file that has the details of the target machines
+Ansible tower can maintain inventory and allow running ansible playbooks with help of GUI
+On RHEL:
+    #dnf config-manager --set-enabled crb
+    #dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
+    #dnf install ansible
+    #ansible --version
+On Ubuntu:
+    #apt update
+    #apt install software-properties-common
+    #add-apt-repository --yes --update ppa:ansible/ansible
+    #apt install ansible
+    #ansible --version
+Project structure suggestion.
+    ansible_project_csp -> "inventory "-> "host"
+                        -> "roles "-> purpose -> "tasks" -> "main.yaml"
+                        -> README.md
+                        -> complete_playbook.yaml
+    #nvim /etc/ansible/hosts
+        ->[target_group]
+        ->10.10.10.10 ansible_ssh_user=admin ansible_ssh_pass=adminpass
+    #ansible all -m ping
+    #ansible target_group -m ping
+    #ansible all -m shell -a date
+    #ansible all -m shell -a "echo 'Hello World'"
+    #nvim ~/ansible/training/01.yaml
+    #ansible-playbook training/01.yaml --syntax-check
+    #ansible-playbook training/01.yaml --list-host
+    #ansible-playbook training/01.yaml
+If all remote machines are running tasks as the same user that is running playbooks(like user admin), You can skip providing remote_user in playbooks and skip setting ansible_ssh_user in inventory. To run root commands, become section in playbook cannot be skipped.
+    #ansible-playbook training/03.yaml --extra-vars file_name=custom.txt
+    #ansible-vault encrypt training/05.yaml
+        ->Create a password
+    #cat training/05.yaml
+    #vim training/05.yaml
+Ansible can encrypt playbooks and variables.
+    #ansible-vault view training/05.yaml
+    #ansible-vault edit training/05.yaml
+    #ansible-playbook --ask-vault-pass training/05.yaml
+    #ansible-vault decrypt training/05.yaml
+Tagging tasks within a playbook allows us to partially run a playbook.
+    #ansible-playbook training/05.yaml --list-tags
+    #ansible-playbook training/05.yaml --tags "start, copy"
+    #ansible-playbook training/05.yaml --skip-tags "install, create"
+
+To use a custom inventory file,
+    #vim /home/admin/aws.txt
+        ->[aws_server]
+        ->10.10.10.10 ansible_ssh_private_key_file=/home/admin/.ssh/aws_ec2.pem
+    #ansible-playbook training/05.yaml --inventory /home/admin/aws.txt
+

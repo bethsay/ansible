@@ -1,0 +1,27 @@
+---
+- name: Web hosting
+  hosts: target_group
+  remote_user: admin
+  become: true
+  tasks:
+    - name: install nginx
+      apt:
+        name: nginx
+        state: latest
+      tag: [install]
+    - name: start and enable
+      service:
+        name: nginx
+        state: started
+      tag: [start]
+    - name: create content
+      copy:
+        content: "<h1>Hello World</h1>"
+        dest: /usr/share/nginx/html/index.html
+      tag: [create]
+    - name: copy content
+      copy:
+        src: page2.html
+        dest: /usr/share/nginx/html/page2.html
+      tag: [copy]
+

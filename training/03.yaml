@@ -1,0 +1,10 @@
+---
+- name: File creation
+  hosts: target_group
+  vars:
+    file_name: world.txt
+  tasks:
+    - name: First file created by ansible
+      file:
+        path: /home/ansible/{{file_name}}
+        state: touch

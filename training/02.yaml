@@ -1,0 +1,8 @@
+---
+- name: File creation
+  hosts: all
+  tasks:
+    - name: First file created by ansible
+      file:
+        path: /home/admin/hello.txt
+        state: touch

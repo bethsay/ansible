@@ -1,0 +1,7 @@
+---
+- name: ping
+  hosts: all
+  tasks:
+    - name: Network test with ping
+      ping:
+      remote_user: admin
