@@ -1,0 +1,22 @@
+On control node as root
+    #useradd admin
+    #su admin
+    #ssh-keygen
+On managed nodes as root
+    #useradd admin
+    #passwd admin
+    #visudo
+        ->admin ALL=(ALL) NOPASSWD: ALL
+        ->#<user> <host>=(<runas_user>:<runas_group>) <flag>: <command>
+        ->#<user> <host1>, <host2> = (<runas_user1>, <runas_user2>, :<run_as_group1>, :<runas_group2>) <flag1>: <flag2>: <command1>, <command2>
+        ->##Cmnd_Alias <COMMANDS> = <command1>, <command2>, <command3>
+        ->##RunAs_Alias <RUNAS_SET> = root, <runas_user1>, <runas_group1>, <runas_group2>
+        ->##Host_Alias <HOSTS> = <hostname>, <fqdn>, <ip_addr>, <ip_addr/subnet_mask>
+        ->##User_Alias <USERS> = <user1>, <user2>, <user3>
+        ->#USERS HOSTS=(RUNAS_SET) <flag1>: <flag2>: COMMANDS
+    #vim /etc/ssh/ssh_config
+        ->PasswordAuthentication yes
+    #systemctl restart sshd
+As admin user on control node
+    #ssh-copy-id <managed_node_ip>
+
