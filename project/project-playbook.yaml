@@ -1,0 +1,10 @@
+---
+- name: Example
+  hosts: all
+  roles:
+    - python
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted

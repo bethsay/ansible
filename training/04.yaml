@@ -4,10 +4,10 @@
   become: true
   tasks:
     - name: git installation
-      apt:
+      yum:
         name: git             #check with "git -v"
         state: latest
     - name: maven installation
-      apt:
+      yum:
         name: maven           #check with "mvn --version"
         state: latest

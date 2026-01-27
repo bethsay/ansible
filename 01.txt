@@ -13,11 +13,6 @@ On Ubuntu:
     #add-apt-repository --yes --update ppa:ansible/ansible
     #apt install ansible
     #ansible --version
-Project structure suggestion.
-    ansible_project_csp -> "inventory "-> "host"
-                        -> "roles "-> purpose -> "tasks" -> "main.yaml"
-                        -> README.md
-                        -> complete_playbook.yaml
     #nvim /etc/ansible/hosts
         ->[target_group]
         ->10.10.10.10 ansible_ssh_user=admin ansible_ssh_pass=adminpass
@@ -45,9 +40,19 @@ Tagging tasks within a playbook allows us to partially run a playbook.
     #ansible-playbook training/05.yaml --tags "start, copy"
     #ansible-playbook training/05.yaml --skip-tags "install, create"
 
-To use a custom inventory file,
-    #vim /home/admin/aws.txt
-        ->[aws_server]
-        ->10.10.10.10 ansible_ssh_private_key_file=/home/admin/.ssh/aws_ec2.pem
-    #ansible-playbook training/05.yaml --inventory /home/admin/aws.txt
+Project structure suggestion.
+    project -> "inventory" -> group_name_for_vms -> "hosts"
+            -> "roles "-> purpose -> "tasks" -> "main.yaml"
+            -> "README.md"
+            -> complete_playbook.yaml
+    #nvim project/inventory/vm-set/hosts
+    #nvim project/role/python/task/main.yaml
+    #nvim project/project-playbook.yaml
+    #ansible-playbook project/project-playbook.yaml --inventory project/inventory/vm-set/hosts
+ansible handler
 
+
+ansible variables
+  string, bool, list, dictionary, list of dictionary, registers
+  variables from files
+  variables passed during runtime

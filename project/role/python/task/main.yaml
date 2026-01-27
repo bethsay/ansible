@@ -1,9 +1,22 @@
 ---
-- name: installing python3
+- name: Installing python3
   become: yes
   apt:
-    name: 
+    name:
       - python3-pip
-
     state: latest
-    update_cache: yescach
+    update_cache: yes
+
+- name: Create directory
+  file:
+    path: ~/custom-dir
+    state: directory
+
+- name: Install nginx
+  apt: name=nginx state=latest update_cache=yes
+
+- name: Load Web content
+  copy: src=index.html dest=/usr/share/nginx/html/index.html
+  notify:
+    - restart nginx
+

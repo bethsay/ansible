@@ -1,0 +1,87 @@
+---
+- name: Ansible Variables
+  hosts: local
+
+####--Defining Variables--####
+  vars:
+    string_var: "Hello World"
+    bool_var: false
+
+    list_var:
+      - zero
+      - one
+      - two
+
+    dictionary_var:
+      zero: 0
+      one: 1
+      two: 2
+
+    complex_var:
+      - string: "Foo"
+        list:
+          - one
+          - two
+      - string: "Bar"
+        dictionary:
+          one: 1
+          two: 2
+      - string: "Hello World"
+
+  vars_file:
+    - import_variables.yml
+
+####--Applying Variables--####
+  tasks:
+    - name: Use string
+      debug:
+        var: string_var
+
+    - name: Use bool
+      debug:
+        msg: "The boolean string is true"
+      when: bool_var
+
+    - name: Use full list
+      debug:
+        var: list_var
+
+    - name: Use list element
+      debug:
+        var: list_var[0]
+
+    - name: Use full dictionary
+      debug:
+        var: dictionary_var
+
+    - name: Use dictionary element
+      debug:
+        var: dictionary_var['one']
+        # var: dictionary_var.one
+
+    - name: Create dynamic variable using existing variable
+    - name: Assign value from existing variable to dynamic variable
+      command: echo "{{dictionary_var['one']}}"
+      register: dynamic_var
+
+    - name: Use dynamic variable
+      debug:
+        var: dynamic_var.stdout
+
+    - name: Get a specific value from complex variable
+      debug:
+        var: complex_var[1].dictionary['one']
+        #Can dot notation be used here?
+
+    - name: Use complex_var data as dictionary key
+      debug:
+        var: dictionary_var[complex_var[0].list[1]]
+        #Can dot notation be used here?
+
+    - name: Use variable from other file
+      debug:
+        var: import_string_var
+
+    - name: Expect variable and value during runtime
+      debug:
+        var: runtime_var
