@@ -45,14 +45,21 @@ Project structure suggestion.
             -> "roles "-> purpose -> "tasks" -> "main.yaml"
             -> "README.md"
             -> complete_playbook.yaml
-    #nvim project/inventory/vm-set/hosts
+    #nvim project/inventory/vm-set1/hosts
     #nvim project/role/python/task/main.yaml
     #nvim project/project-playbook.yaml
-    #ansible-playbook project/project-playbook.yaml --inventory project/inventory/vm-set/hosts
+    #ansible-playbook project/project-playbook.yaml --inventory project/inventory/vm-set1/hosts
 ansible handler
 
 
 ansible variables
-  string, bool, list, dictionary, list of dictionary, registers
-  variables from files
-  variables passed during runtime
+string, bool, list, dictionary, list of dictionary, registers. Variable types might not be strict.
+variables from files
+variables passed during runtime
+    #ansible-playbook variables-project/env-variables-playbook.yaml --inventory variables-project/inventory/vm-set1/hosts -v
+        ->To see what ansible.builtin is doing, to see if env substitution is happening use verbose flag
+    #ansible-playbook variables-project/variables-project-playbook.yaml --inventory variables-project/inventory/vm-set1/hosts --extra-vars 'runtime_var=52'
+    #ansible-playbook variables-project/variables-project-playbook.yaml --inventory variables-project/inventory/vm-set1/hosts --extra-vars '{"runtime_var":"59"}'
+    #ansible-playbook variables-project/variables-project-playbook.yaml --inventory variables-project/inventory/vm-set1/hosts --extra-vars "@variables-project/runtime_variables.yml "
+    #ansible-playbook variables-project/variables-project-playbook.yaml --inventory variables-project/inventory/vm-set1/hosts --extra-vars "@runtime_variables.yml "
+

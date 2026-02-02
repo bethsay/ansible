@@ -60,13 +60,14 @@
         # var: dictionary_var.one
 
     - name: Create dynamic variable using existing variable
-    - name: Assign value from existing variable to dynamic variable
       command: echo "{{dictionary_var['one']}}"
       register: dynamic_var
+      #Did we need to use echo command? Cant we use debug: and var:?
 
     - name: Use dynamic variable
       debug:
         var: dynamic_var.stdout
+        #What other attributes are available
 
     - name: Get a specific value from complex variable
       debug:
@@ -78,6 +79,11 @@
         var: dictionary_var[complex_var[0].list[1]]
         #Can dot notation be used here?
 
+    - name: Get list out of dictionary using filters
+      debug:
+        var: dictionary_var.keys() | list | map (upper) | list
+        #Wouldnt we get list output without using the list function?
+
     - name: Use variable from other file
       debug:
         var: import_string_var
@@ -85,3 +91,4 @@
     - name: Expect variable and value during runtime
       debug:
         var: runtime_var
+
