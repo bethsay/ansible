@@ -1,0 +1,34 @@
+---
+- name: Install Nginx server if planned
+  apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+  when: install_nginx_var
+
+- name: Get kernal and os type if Ubuntu 20+
+  debug:
+    msg:
+      - "{{ ansible_facts['kernel_version'] }}"
+      - "{{ ansible_facts['os_family'] }}"
+  when:
+    - ansible_facts['distribution'] == "Ubuntu"
+    - ansible_facts['distribution_major_version'] | int >= "20"
+  # when: (ansible_distribution=="Ubuntu") and (ansible_distribution_version is version('22.0','>='))
+  # when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version('22.0', '>=')
+
+- name: Read file
+  command: cat /etc/os-release
+  register: file_content
+
+- name: Check file and display content
+  debug:
+    var: file_content.stdout                                          #https://docs.ansible.com/projects/ansible/latest/reference_appendices/common_return_values.html
+    # var: file_content.stdout_lines                                  #'stdout' and 'stdout_lines' are return values available in ansible
+  # when: "'PRETTY_NAME=' in os_release_output.stdout"                #https://docs.ansible.com/projects/rulebook/en/v1.2.0/conditions.html#supported-operators
+  # when: os_release_output.stdout is search "PRETTY_NAME="           #'in' and 'is search' are ansible condition operators
+  when: os_release_output.stdout.find('PRETTY_NAME') != -1            #https://www.w3schools.com/python/python_ref_string.asp
+  # when: os_release_output.stdout.startswith('PRETTY_NAME')          #find() and startswith() are python string operators
+  # when: os_release_output.stdout_lines | select('search', '^PRETTY_NAME=') | list | length > 0
+
+

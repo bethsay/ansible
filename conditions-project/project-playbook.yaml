@@ -1,0 +1,6 @@
+---
+- name: Ansible Conditional operators
+  hosts: all
+  become: yes
+  roles:
+    - conditions-checks

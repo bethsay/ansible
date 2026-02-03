@@ -3,16 +3,16 @@
   hosts: external
 
   environment:
-    PLAYBOOK_ENV: "Hello World"
+    PLAYBOOK_ENV: "v1.0.0"
 
   tasks:
     - name: Use env_var that are playbook and task scoped
       environment:
-        TASK_ENV: "FOO BAR"
+        TASK_ENV: "beta"
       ansible.builtin.command: "echo $PLAYBOOK_ENV and $TASK_ENV"
 
     - name: Ansible builtin variable
-      ansible.builtin.debug:
+      ansible.builtin.debug:                  #https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_vars_facts.html#information-about-ansible-magic-variables
         var: ansible_facts
         # var: playbook_dir
         # var: ansible_version

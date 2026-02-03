@@ -20,6 +20,7 @@ On Ubuntu:
     #ansible target_group -m ping
     #ansible all -m shell -a date
     #ansible all -m shell -a "echo 'Hello World'"
+https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/index.html#modules
     #nvim ~/ansible/training/01.yaml
     #ansible-playbook training/01.yaml --syntax-check
     #ansible-playbook training/01.yaml --list-host
@@ -42,7 +43,8 @@ Tagging tasks within a playbook allows us to partially run a playbook.
 
 Project structure suggestion.
     project -> "inventory" -> group_name_for_vms -> "hosts"
-            -> "roles "-> purpose -> "tasks" -> "main.yaml"
+            -> "roles" -> purpose -> "tasks" -> "main.yaml"
+                                  -> "vars"  -> "main.yaml"
             -> "README.md"
             -> complete_playbook.yaml
     #nvim project/inventory/vm-set1/hosts
@@ -62,4 +64,5 @@ variables passed during runtime
     #ansible-playbook variables-project/variables-project-playbook.yaml --inventory variables-project/inventory/vm-set1/hosts --extra-vars '{"runtime_var":"59"}'
     #ansible-playbook variables-project/variables-project-playbook.yaml --inventory variables-project/inventory/vm-set1/hosts --extra-vars "@variables-project/runtime_variables.yml "
     #ansible-playbook variables-project/variables-project-playbook.yaml --inventory variables-project/inventory/vm-set1/hosts --extra-vars "@runtime_variables.yml "
+
 
