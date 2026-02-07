@@ -1,2 +1,9 @@
 ---
 install_nginx_var: false
+list_var: [0, 1, 2, 3]
+dictionary_var: { zero: 0, one: 1, two: 2, three: 3 }
+list_of_dictionary_var:
+  - { name: zero, number: 0}
+  - { name: one, number: 1}
+  - { name: two, number: 2}
+  - { name: three, number: 3}

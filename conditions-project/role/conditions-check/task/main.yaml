@@ -3,7 +3,7 @@
   apt:
     name: nginx
     state: latest
-    update_cache: yes
+    update_cache: true
   when: install_nginx_var
 
 - name: Get kernal and os type if Ubuntu 20+
@@ -23,12 +23,40 @@
 
 - name: Check file and display content
   debug:
-    var: file_content.stdout                                          #https://docs.ansible.com/projects/ansible/latest/reference_appendices/common_return_values.html
-    # var: file_content.stdout_lines                                  #'stdout' and 'stdout_lines' are return values available in ansible
-  # when: "'PRETTY_NAME=' in os_release_output.stdout"                #https://docs.ansible.com/projects/rulebook/en/v1.2.0/conditions.html#supported-operators
-  # when: os_release_output.stdout is search "PRETTY_NAME="           #'in' and 'is search' are ansible condition operators
-  when: os_release_output.stdout.find('PRETTY_NAME') != -1            #https://www.w3schools.com/python/python_ref_string.asp
-  # when: os_release_output.stdout.startswith('PRETTY_NAME')          #find() and startswith() are python string operators
-  # when: os_release_output.stdout_lines | select('search', '^PRETTY_NAME=') | list | length > 0
+    var: file_content.stdout                                # https://docs.ansible.com/projects/ansible/latest/reference_appendices/common_return_values.html
+    # var: file_content.stdout_lines                        # 'stdout' and 'stdout_lines' are return values available in ansible
+    # var: file_content.stdout_lines[0:4]
+    # msg: "{{ file_content.stdout_lines | select('search', '^PRETTY_NAME=') | first }}"
+  # when: file_content is successful
+  # when: "'PRETTY_NAME=' in file_content.stdout"           # https://docs.ansible.com/projects/rulebook/en/latest/conditions.html#supported-operators
+  # when: "'PRETTY_NAME=' is in (file_content.stdout)"      # https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_tests.html#tests
+  # when: file_content.stdout is search ("PRETTY_NAME=")    # 'in', 'is in' and 'is search' are test plugins within ansible.builtin.
+  when: file_content.stdout.find('PRETTY_NAME') != -1       # https://www.w3schools.com/python/python_ref_string.asp
+  # when: file_content.stdout.startswith('PRETTY_NAME')     # find() and startswith() are python string operators
+  # when: file_content.stdout_lines | select('search', '^PRETTY_NAME=') | list | length > 0
+                           # stdout_lines splits the multi-line stdout into a list where each line is an element
+                           # select(test, arg1, arg2) filters stdout_lines by running any test on each element and selects only those that pass
+                           # select('search', '^PRETTY_NAME=') runs ansible.buildtin.search on each list element selecting those that start with 'PRETTY_NAME'
+                           # list filter is applied to control the data type. The subsequent filter checks if list is not empty.
 
+- name: Loop through list when condition is true
+  loop: "{{ list_var }}"
+  debug:
+    msg: "List Loop counter : {{ item }}"                   # item a keyword used when referring to elements of a loop
+  when: list_var > 0
 
+- name: Loop through dictionary when condition is true
+  loop: "{{ dictionary_var | dict2items }}"                 # dict2items filter converts each key:value pair into list elements
+  loop_control:
+    loop_var: unit                                          # loop_var allows us to customise the looping keyword to not be 'item'
+  debug:
+    msg: "Dict key is {{ unit.key }} and value is {{ unit.value }}"
+  when: unit.value > 0
+
+- name: Loop through list of dictionary items
+  debug:
+    msg: "Name is {{ index.name }} and Number is {{ index.number }}"
+  loop: "{{ list_of_dictionary_var }}"
+  loop_control:
+    loop_var: index
+  when: index.number > 0

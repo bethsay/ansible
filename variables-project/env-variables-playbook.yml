@@ -13,7 +13,7 @@
 
     - name: Ansible builtin variable
       ansible.builtin.debug:                  #https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_vars_facts.html#information-about-ansible-magic-variables
-        var: ansible_facts
+        var: ansible_facts                    #https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_vars_facts.html#ansible-facts
         # var: playbook_dir
         # var: ansible_version
         # Will playbook_dir and ansible_version work?
